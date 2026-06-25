@@ -22,7 +22,7 @@ public class AuthController {
     @PostMapping("/login")
     public Result<String> login(@RequestBody LoginRequest request) {
         if ("admin".equals(request.getUsername()) && "admin123".equals(request.getPassword())) {
-            String token = jwtUtil.generateToken("1");
+            String token = jwtUtil.generateToken("1", "ADMIN");
             return Result.success(token);
         }
         return Result.error("用户名或密码错误");

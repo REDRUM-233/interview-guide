@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
@@ -15,12 +14,17 @@ public class JwtUtil {
     private final SecretKey secretKey;
 
     public JwtUtil() {
-        this.secretKey = Keys.hmacShaKeyFor("RedRumIsLearningJWT".getBytes());
+        this.secretKey = Jwts.SIG.HS256.key().build();
     }
 
     public String extractUserId(String token) {
         Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
         return claims.getSubject();
+    }
+
+    public String extractRole(String token) {
+        Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
+        return claims.get("role", String.class);
     }
 
     public boolean validateToken(String token) {
@@ -34,6 +38,11 @@ public class JwtUtil {
 
     public String generateToken(String userId) {
         return Jwts.builder().subject(userId).issuedAt(new java.util.Date())
+                   .expiration(new java.util.Date(System.currentTimeMillis() + 86400000)).signWith(secretKey).compact();
+    }
+
+    public String generateToken(String userId, String role) {
+        return Jwts.builder().subject(userId).claim("role", role).issuedAt(new java.util.Date())
                    .expiration(new java.util.Date(System.currentTimeMillis() + 86400000)).signWith(secretKey).compact();
     }
 }
