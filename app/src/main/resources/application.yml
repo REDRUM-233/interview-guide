@@ -243,7 +243,7 @@ app:
       # Qwen TTS Realtime Configuration (WebSocket-based)
       # 音色列表文档：https://help.aliyun.com/zh/model-studio/qwen-tts-realtime
       tts:
-        model: qwen3-tts-flash-realtime
+        model: qwen3-tts-flash-realtime-2025-11-27
         api-key: ${AI_BAILIAN_API_KEY}
         voice: Cherry
         format: pcm
